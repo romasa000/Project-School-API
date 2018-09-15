@@ -12,6 +12,7 @@ import java.util.Set;
 @Entity
 @Table(name = "department")
 public class Department implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "department_id")
