@@ -18,25 +18,46 @@ public class CourseInstructorController {
         return courseInstructorRepository.findAll();
     }
 
-    @RequestMapping(value = "/{id}",method = RequestMethod.GET)
-    public Object getOneCourseInstructor(@PathVariable("id") Long id){
-        return courseInstructorRepository.findOne(id);
-    }
-
-
     @RequestMapping(method = RequestMethod.POST)
     public Object saveCourseInstructor(@RequestBody(required = true) CourseInstructor courseInstructor){
         return this.courseInstructorRepository.save(courseInstructor);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PATCH)
-    public Object editCourseInstructor(@PathVariable("id") Long id, @RequestBody(required = true) CourseInstructor courseInstructor){
-        return courseInstructorRepository.save(courseInstructor);
+    @RequestMapping(method = RequestMethod.PATCH)
+    public Object editCourseInstructor(@RequestBody(required = true) CourseInstructor newCourseInstructor){
+        return courseInstructorRepository.save(newCourseInstructor);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void deleteCourseInstructor(@PathVariable("id") Long id){
-        courseInstructorRepository.delete(id);
+    @RequestMapping(method = RequestMethod.DELETE)
+    public void deleteCourseInstructor(@RequestBody(required = true) CourseInstructor courseInstructor){
+        courseInstructorRepository.delete(courseInstructor);
     }
+
+    /* Format base JSON
+    * {
+        "courseInstructorId": {},
+        "person": {
+          "personId": 1,
+          "lastName": "Sánchez",
+          "firstName": "José",
+          "hireName": 1514937600000,
+          "enrollmentDate": 1515974400000,
+          "officeAssignment": null
+        },
+        "course": {
+          "courseId": 1,
+          "title": "Java SE",
+          "credits": 35,
+          "department": {
+            "departmentId": 1,
+            "name": "Informática",
+            "budget": 214.45,
+            "startDate": 1516924800000,
+            "administrador": 4
+          },
+          "url": "www.coursera.com/java-se"
+        }
+      }
+    **/
 
 }

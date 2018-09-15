@@ -1,5 +1,6 @@
 package org.projectschool.school.core.eis.bo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,8 +26,10 @@ public class Person implements Serializable {
     private Date enrollmentDate;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "person")
     private OfficeAssignment officeAssignment;
+    @JsonIgnore // AQUI
     @OneToMany(mappedBy = "person")
     private Set<StudentGrade> studentGrades;
+    @JsonIgnore // AQUI
     @OneToMany(mappedBy = "person")
     private Set<CourseInstructor> courseInstructors;
 }
