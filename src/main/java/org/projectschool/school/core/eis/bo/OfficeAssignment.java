@@ -1,5 +1,6 @@
 package org.projectschool.school.core.eis.bo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,6 +20,7 @@ public class OfficeAssignment implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
     @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonIgnore //Importante
     @JoinColumn(name = "instructor_id",referencedColumnName = "person_id",nullable = false)
     private Person person;
 }

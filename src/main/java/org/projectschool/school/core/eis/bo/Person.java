@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 
@@ -20,10 +21,10 @@ public class Person implements Serializable {
     private String lastName;
     @Column(name = "first_name")
     private String firstName;
-    @Column(name = "hire_name")
-    private Date hireName;
+    @Column(name = "hire_date")
+    private Calendar hireDate;
     @Column(name = "enrollment_date")
-    private Date enrollmentDate;
+    private Calendar enrollmentDate;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "person")
     private OfficeAssignment officeAssignment;
     @JsonIgnore // AQUI
