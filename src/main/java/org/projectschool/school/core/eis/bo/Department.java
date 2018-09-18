@@ -28,4 +28,6 @@ public class Department implements Serializable {
     @OneToMany(mappedBy = "department")
     @JsonIgnore
     private Set<Course> courses;
+
+
 }

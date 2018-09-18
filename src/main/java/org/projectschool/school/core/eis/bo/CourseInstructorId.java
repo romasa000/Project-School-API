@@ -1,10 +1,13 @@
 package org.projectschool.school.core.eis.bo;
 
+import lombok.Data;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.GeneratedValue;
 import java.io.Serializable;
 
+@Data
 @Embeddable
 public class CourseInstructorId implements Serializable {
 
