@@ -1,7 +1,9 @@
 package org.projectschool.school.core.controller;
 
 import org.projectschool.school.core.bs.dao.CourseInstructorRepository;
+import org.projectschool.school.core.eis.bo.Course;
 import org.projectschool.school.core.eis.bo.CourseInstructor;
+import org.projectschool.school.core.eis.bo.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,7 @@ public class CourseInstructorController {
 
     @RequestMapping(method = RequestMethod.POST)
     public Object saveCourseInstructor(@RequestBody(required = true) CourseInstructor courseInstructor){
-        return this.courseInstructorRepository.save(courseInstructor);
+        return   this.courseInstructorRepository.save(courseInstructor);
     }
 
     @RequestMapping(method = RequestMethod.PATCH)
