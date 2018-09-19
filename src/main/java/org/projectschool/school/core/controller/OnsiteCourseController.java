@@ -2,7 +2,9 @@ package org.projectschool.school.core.controller;
 
 import org.projectschool.school.core.bs.dao.OnsiteCourseRepository;
 import org.projectschool.school.core.eis.bo.OnsiteCourse;
+import org.projectschool.school.core.util.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,22 +22,48 @@ public class OnsiteCourseController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Object getOneOnsiteCourse(@PathVariable("id") Long id){
-        return onsiteCourseRepository.findOne(id);
+        if(id == null || id <= 0){
+            return new BaseResponse(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT, "Debe mandar un id válido. ¡El id: " + id + " no se reconoce en la DB.!");
+        }
+
+        if(onsiteCourseRepository.findOne(id) == null){
+            return new BaseResponse(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND,"No se encuentra OnsiteCourse en la DB.");
+        }
+
+        return new BaseResponse(HttpStatus.FOUND.value(), HttpStatus.FOUND, "Operación realizada correctamente.", onsiteCourseRepository.findOne(id));
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public Object saveOnsiteCourse(@RequestBody(required = true) OnsiteCourse onsiteCourse){
-        return this.onsiteCourseRepository.save(onsiteCourse);
+        return new BaseResponse(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED, "OnsiteCourse registrado correctamente.", this.onsiteCourseRepository.save(onsiteCourse));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PATCH)
     public Object editOnsiteCourse(@PathVariable("id") Long id, @RequestBody(required = true) OnsiteCourse newOnsiteCourse){
-        return onsiteCourseRepository.save(newOnsiteCourse);
+        if(id == null || id <= 0){
+            return new BaseResponse(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT, "Debe mandar un id válido. ¡El id: " + id + " no se reconoce en la DB.!");
+        }
+
+        if(onsiteCourseRepository.findOne(id) == null){
+            return new BaseResponse(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND,"No se encuentra OnsiteCourse en la DB.");
+        }
+
+        return new BaseResponse(HttpStatus.FOUND.value(), HttpStatus.FOUND, "OnsiteCourse editado correctamente.", onsiteCourseRepository.save(newOnsiteCourse));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void deleteOnsiteCourse(@PathVariable("id") Long id){
+    public Object deleteOnsiteCourse(@PathVariable("id") Long id){
+        if(id == null || id <= 0){
+            return new BaseResponse(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT, "Debe mandar un id válido. ¡El id: " + id + " no se reconoce en la DB.!");
+        }
+
+        if(onsiteCourseRepository.findOne(id) == null){
+            return new BaseResponse(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND,"No se encuentra OnlineCourse en la DB.");
+        }
+
         onsiteCourseRepository.delete(id);
+
+        return new BaseResponse(HttpStatus.FOUND.value(), HttpStatus.FOUND, "OnsiteCourse eliminado correctamente.");
     }
 
     /* Format base JSON

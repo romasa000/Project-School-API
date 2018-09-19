@@ -3,7 +3,9 @@ package org.projectschool.school.core.controller;
 
 import org.projectschool.school.core.bs.dao.OfficeAssignmentRepository;
 import org.projectschool.school.core.eis.bo.OfficeAssignment;
+import org.projectschool.school.core.util.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,22 +23,48 @@ public class OfficeAsignmentController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Object getOneOfficeAssignment(@PathVariable("id") Long id){
-        return officeAssignmentRepository.findOne(id);
+        if(id == null || id <= 0){
+            return new BaseResponse(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT, "Debe mandar un id válido. ¡El id: " + id + " no se reconoce en la DB.!");
+        }
+
+        if(officeAssignmentRepository.findOne(id) == null){
+            return new BaseResponse(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND,"No se encuentra OfficeAssignment en la DB.");
+        }
+
+        return new BaseResponse(HttpStatus.FOUND.value(), HttpStatus.FOUND, "Operación realizada correctamente.", officeAssignmentRepository.findOne(id));
+
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public Object saveOfficeAssignment(@RequestBody(required = true) OfficeAssignment officeAssignment){
-        return this.officeAssignmentRepository.save(officeAssignment);
+        return new BaseResponse(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED, "OfficeAssignment registrado correctamente.", this.officeAssignmentRepository.save(officeAssignment));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PATCH)
     public Object editOfficeAssignment(@PathVariable("id") Long id, @RequestBody(required = true) OfficeAssignment newOfficeAssignment){
-        return officeAssignmentRepository.save(newOfficeAssignment);
+        if(id == null || id <= 0){
+            return new BaseResponse(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT, "Debe mandar un id válido. ¡El id: " + id + " no se reconoce en la DB.!");
+        }
+
+        if(officeAssignmentRepository.findOne(id) == null){
+            return new BaseResponse(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND,"No se encuentra OfficeAssignment en la DB.");
+        }
+        return new BaseResponse(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED, "OfficeAssignment editado correctamente.", officeAssignmentRepository.save(newOfficeAssignment));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void deleteOfficeAssigment(@PathVariable("id") Long id){
+    public Object deleteOfficeAssigment(@PathVariable("id") Long id){
+        if(id == null || id <= 0){
+            return new BaseResponse(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT, "Debe mandar un id válido. ¡El id: " + id + " no se reconoce en la DB.!");
+        }
+
+        if(officeAssignmentRepository.findOne(id) == null){
+            return new BaseResponse(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND,"No se encuentra ese OfficeAssignment en la DB.");
+        }
+
         officeAssignmentRepository.delete(id);
+
+        return new BaseResponse(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED, "OfficeAssignment eliminado correctamente.");
     }
 
 }

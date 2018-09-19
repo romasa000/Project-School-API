@@ -4,7 +4,9 @@ import org.projectschool.school.core.bs.dao.CourseInstructorRepository;
 import org.projectschool.school.core.eis.bo.Course;
 import org.projectschool.school.core.eis.bo.CourseInstructor;
 import org.projectschool.school.core.eis.bo.Person;
+import org.projectschool.school.core.util.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +24,7 @@ public class CourseInstructorController {
 
     @RequestMapping(method = RequestMethod.POST)
     public Object saveCourseInstructor(@RequestBody(required = true) CourseInstructor courseInstructor){
-        return   this.courseInstructorRepository.save(courseInstructor);
+        return new BaseResponse(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED, "CourseInstructor registrado correctamente.", this.courseInstructorRepository.save(courseInstructor));
     }
 
     @RequestMapping(method = RequestMethod.PATCH)
@@ -37,14 +39,9 @@ public class CourseInstructorController {
 
     /* Format base JSON
     * {
-        "courseInstructorId": {},
-        "person": {
-          "personId": 1,
-          "lastName": "Sánchez",
-          "firstName": "José",
-          "hireName": 1514937600000,
-          "enrollmentDate": 1515974400000,
-          "officeAssignment": null
+        "courseInstructorId": {
+          "courseId": 1,
+          "personId": 1
         },
         "course": {
           "courseId": 1,
@@ -58,6 +55,18 @@ public class CourseInstructorController {
             "administrador": 4
           },
           "url": "www.coursera.com/java-se"
+        },
+        "person": {
+          "personId": 1,
+          "lastName": "Sánchez",
+          "firstName": "José",
+          "hireDate": null,
+          "enrollmentDate": 1515974400000,
+          "officeAssignment": {
+            "instructorId": 1,
+            "location": "Villa Nueva",
+            "timestamp": 1525305600000
+          }
         }
       }
     **/
