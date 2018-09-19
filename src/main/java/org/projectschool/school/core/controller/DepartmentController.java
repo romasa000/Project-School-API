@@ -6,6 +6,7 @@ import org.projectschool.school.core.bs.dao.DepartmentRepository;
 import org.projectschool.school.core.eis.bo.Department;
 import org.projectschool.school.core.util.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +18,16 @@ public class DepartmentController {
     @Autowired
     private DepartmentRepository departmentRepository;
 
+    //http://localhost:9300/api/v1/department?pageable=true&page=1&size=10
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<Department> getDepartments(){
-
-        return departmentRepository.findAll();
+    public Iterable<Department> getDepartments(@RequestParam(value = "pageable", required = false) boolean pageable,  //¿Quieres paginación?
+        @RequestParam(value = "page", required = false) Integer page, //¿Que pagina guiero?
+        @RequestParam(value = "size", required = false) Integer size){ //¿Qué tamaño?
+        if(pageable){
+            return departmentRepository.findAll(new PageRequest(page, size));
+        } else {
+            return departmentRepository.findAll();
+        }
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
