@@ -5,6 +5,7 @@ import org.projectschool.school.core.bs.dao.OfficeAssignmentRepository;
 import org.projectschool.school.core.eis.bo.OfficeAssignment;
 import org.projectschool.school.core.util.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +18,17 @@ public class OfficeAsignmentController {
     private OfficeAssignmentRepository officeAssignmentRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<OfficeAssignment> getOfficeAsignment(){
-        return officeAssignmentRepository.findAll();
+    public Iterable<OfficeAssignment> getOfficeAsignment(
+            @RequestParam(value = "pageable", required = false) boolean pageable,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size
+    ){
+        if(pageable){
+            return officeAssignmentRepository.findAll(new PageRequest(page, size));
+        } else{
+            return officeAssignmentRepository.findAll();
+        }
+
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

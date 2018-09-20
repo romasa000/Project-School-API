@@ -6,6 +6,7 @@ import org.projectschool.school.core.eis.bo.CourseInstructor;
 import org.projectschool.school.core.eis.bo.Person;
 import org.projectschool.school.core.util.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,17 @@ public class CourseInstructorController {
     private CourseInstructorRepository courseInstructorRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<CourseInstructor> getCourseInstructors(){
-        return courseInstructorRepository.findAll();
+    public Iterable<CourseInstructor> getCourseInstructors(
+        @RequestParam(value = "pageable", required = false) boolean pageable,
+        @RequestParam(value = "page", required = false) Integer page,
+        @RequestParam(value = "size", required = false) Integer size
+    ){
+        if(pageable){
+            return courseInstructorRepository.findAll(new PageRequest(page, size));
+        } else{
+            return courseInstructorRepository.findAll();
+        }
+
     }
 
     @RequestMapping(method = RequestMethod.POST)

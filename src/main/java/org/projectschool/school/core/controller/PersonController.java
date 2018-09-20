@@ -1,9 +1,11 @@
 package org.projectschool.school.core.controller;
 
+import javafx.scene.chart.ValueAxis;
 import org.projectschool.school.core.bs.dao.PersonRepository;
 import org.projectschool.school.core.eis.bo.Person;
 import org.projectschool.school.core.util.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +18,17 @@ public class PersonController {
     private PersonRepository personRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<Person> getPerson(){
-        return personRepository.findAll();
+    public Iterable<Person> getPerson(
+            @RequestParam(value = "pageable", required = false) boolean pageable,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size
+    ){
+        if(pageable){
+            return personRepository.findAll(new PageRequest(page, size));
+        } else {
+            return personRepository.findAll();
+        }
+
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

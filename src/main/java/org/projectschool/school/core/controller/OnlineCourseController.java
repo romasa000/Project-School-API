@@ -4,6 +4,7 @@ import org.projectschool.school.core.bs.dao.OnlineCourseRespository;
 import org.projectschool.school.core.eis.bo.OnlineCourse;
 import org.projectschool.school.core.util.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,18 @@ public class OnlineCourseController {
     private OnlineCourseRespository onlineCourseRespository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<OnlineCourse> getOnlineCourses(){
-        return onlineCourseRespository.findAll();
+    public Iterable<OnlineCourse> getOnlineCourses(
+            @RequestParam(value = "pageable", required = false) boolean pageable,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size
+
+    ){
+        if(pageable){
+            return onlineCourseRespository.findAll();
+        } else{
+            return onlineCourseRespository.findAll( new PageRequest(page, size));
+        }
+
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

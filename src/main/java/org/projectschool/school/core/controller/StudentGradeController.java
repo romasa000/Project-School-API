@@ -4,6 +4,7 @@ import org.projectschool.school.core.bs.dao.StudentGradeRepository;
 import org.projectschool.school.core.eis.bo.StudentGrade;
 import org.projectschool.school.core.util.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,16 @@ public class StudentGradeController {
     private StudentGradeRepository studentGradeRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<StudentGrade> getStudentGrades(){
-        return studentGradeRepository.findAll();
+    public Iterable<StudentGrade> getStudentGrades(
+            @RequestParam(value = "pageable", required = false) boolean pageable,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size
+    ){
+        if(pageable){
+            return studentGradeRepository.findAll(new PageRequest(page, size));
+        } else{
+            return studentGradeRepository.findAll();
+        }
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
